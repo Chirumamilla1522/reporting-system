@@ -1,1 +1,4 @@
 node_modules
+amplify
+build
+.DS_Store
