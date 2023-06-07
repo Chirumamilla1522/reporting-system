@@ -1,0 +1,50 @@
+enum CTYPE {
+  IT
+  SERVICES
+  GOVERNMENT
+}
+
+type COMPANY @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  name: String!
+  type: CTYPE!
+  INFORM: [INCIDENT!] @hasMany(indexName: "byCOMPANY", fields: ["id"])
+}
+
+enum ITYPE {
+  SCANNING_AND_RECONNAISSANCE
+  UNAUTHORIZED_ACCESS_TO_NETWORK_OR_DEVICE
+  DATA_EXPOSURE_THEFT_0R_LEAK
+  MALICIOUS_CODE_MALWARE
+}
+
+enum IMPACT {
+  IT_SYSTEMS
+  OPERATIONAL_SYSTEMS
+  CUSTOMER_DATA
+}
+
+type INCIDENT @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  date_time: AWSDateTime!
+  ongoing: Boolean!
+  Impact: IMPACT!
+  Incident_type: ITYPE!
+  by_you_or_third_party: Boolean!
+  userID: ID! @index(name: "byUSER")
+  companyID: ID! @index(name: "byCOMPANY")
+}
+
+type USER @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  REPORT: [INCIDENT] @hasMany(indexName: "byUSER", fields: ["id"])
+  email: AWSEmail!
+  firstname: String!
+  lastname: String!
+  phonenumber: AWSPhone!
+  organisationname: String
+  organisationaddress: String
+  websiteaddress: AWSURL
+  verify_email: AWSEmail!
+}
+ 

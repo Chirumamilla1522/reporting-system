@@ -1,0 +1,19 @@
+{
+    "AppSyncApiName": "reportingsystem",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authreportingsystem",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "S3DeploymentBucket": "amplify-amplify6ae68c235d364-staging-192727-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/62dee5586df245a9351524cfd7a71e3e8569f57e"
+}

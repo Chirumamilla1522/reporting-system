@@ -1,0 +1,484 @@
+enum CTYPE {
+  IT
+  SERVICES
+  GOVERNMENT
+}
+
+type COMPANY @aws_iam @aws_cognito_user_pools @aws_api_key {
+  id: ID!
+  name: String!
+  type: CTYPE!
+  INFORM(filter: ModelINCIDENTFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelINCIDENTConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  owner: String
+}
+
+enum ITYPE {
+  SCANNING_AND_RECONNAISSANCE
+  UNAUTHORIZED_ACCESS_TO_NETWORK_OR_DEVICE
+  DATA_EXPOSURE_THEFT_0R_LEAK
+  MALICIOUS_CODE_MALWARE
+}
+
+enum IMPACT {
+  IT_SYSTEMS
+  OPERATIONAL_SYSTEMS
+  CUSTOMER_DATA
+}
+
+type INCIDENT @aws_iam @aws_cognito_user_pools @aws_api_key {
+  id: ID!
+  date_time: AWSDateTime!
+  ongoing: Boolean!
+  Impact: IMPACT!
+  Incident_type: ITYPE!
+  by_you_or_third_party: Boolean!
+  userID: ID!
+  companyID: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  owner: String
+}
+
+type USER @aws_iam @aws_cognito_user_pools @aws_api_key {
+  id: ID!
+  REPORT(filter: ModelINCIDENTFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelINCIDENTConnection
+  email: AWSEmail!
+  firstname: String!
+  lastname: String!
+  phonenumber: AWSPhone!
+  organisationname: String
+  organisationaddress: String
+  websiteaddress: AWSURL
+  verify_email: AWSEmail!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  owner: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelCOMPANYConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [COMPANY]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelCTYPEInput {
+  eq: CTYPE
+  ne: CTYPE
+}
+
+input ModelCOMPANYFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  type: ModelCTYPEInput
+  and: [ModelCOMPANYFilterInput]
+  or: [ModelCOMPANYFilterInput]
+  not: ModelCOMPANYFilterInput
+  _deleted: ModelBooleanInput
+}
+
+type Query {
+  getCOMPANY(id: ID!): COMPANY @aws_api_key @aws_iam @aws_cognito_user_pools
+  listCOMPANIES(filter: ModelCOMPANYFilterInput, limit: Int, nextToken: String): ModelCOMPANYConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  syncCOMPANIES(filter: ModelCOMPANYFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelCOMPANYConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  getINCIDENT(id: ID!): INCIDENT @aws_api_key @aws_iam @aws_cognito_user_pools
+  listINCIDENTS(filter: ModelINCIDENTFilterInput, limit: Int, nextToken: String): ModelINCIDENTConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  syncINCIDENTS(filter: ModelINCIDENTFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelINCIDENTConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  iNCIDENTSByUserID(userID: ID!, sortDirection: ModelSortDirection, filter: ModelINCIDENTFilterInput, limit: Int, nextToken: String): ModelINCIDENTConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  iNCIDENTSByCompanyID(companyID: ID!, sortDirection: ModelSortDirection, filter: ModelINCIDENTFilterInput, limit: Int, nextToken: String): ModelINCIDENTConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  getUSER(id: ID!): USER @aws_api_key @aws_iam @aws_cognito_user_pools
+  listUSERS(filter: ModelUSERFilterInput, limit: Int, nextToken: String): ModelUSERConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  syncUSERS(filter: ModelUSERFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUSERConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+}
+
+input ModelCOMPANYConditionInput {
+  name: ModelStringInput
+  type: ModelCTYPEInput
+  and: [ModelCOMPANYConditionInput]
+  or: [ModelCOMPANYConditionInput]
+  not: ModelCOMPANYConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateCOMPANYInput {
+  id: ID
+  name: String!
+  type: CTYPE!
+  _version: Int
+}
+
+input UpdateCOMPANYInput {
+  id: ID!
+  name: String
+  type: CTYPE
+  _version: Int
+}
+
+input DeleteCOMPANYInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createCOMPANY(input: CreateCOMPANYInput!, condition: ModelCOMPANYConditionInput): COMPANY @aws_api_key @aws_iam @aws_cognito_user_pools
+  updateCOMPANY(input: UpdateCOMPANYInput!, condition: ModelCOMPANYConditionInput): COMPANY @aws_api_key @aws_iam @aws_cognito_user_pools
+  deleteCOMPANY(input: DeleteCOMPANYInput!, condition: ModelCOMPANYConditionInput): COMPANY @aws_api_key @aws_iam @aws_cognito_user_pools
+  createINCIDENT(input: CreateINCIDENTInput!, condition: ModelINCIDENTConditionInput): INCIDENT @aws_api_key @aws_iam @aws_cognito_user_pools
+  updateINCIDENT(input: UpdateINCIDENTInput!, condition: ModelINCIDENTConditionInput): INCIDENT @aws_api_key @aws_iam @aws_cognito_user_pools
+  deleteINCIDENT(input: DeleteINCIDENTInput!, condition: ModelINCIDENTConditionInput): INCIDENT @aws_api_key @aws_iam @aws_cognito_user_pools
+  createUSER(input: CreateUSERInput!, condition: ModelUSERConditionInput): USER @aws_api_key @aws_iam @aws_cognito_user_pools
+  updateUSER(input: UpdateUSERInput!, condition: ModelUSERConditionInput): USER @aws_api_key @aws_iam @aws_cognito_user_pools
+  deleteUSER(input: DeleteUSERInput!, condition: ModelUSERConditionInput): USER @aws_api_key @aws_iam @aws_cognito_user_pools
+}
+
+input ModelSubscriptionCOMPANYFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  type: ModelSubscriptionStringInput
+  and: [ModelSubscriptionCOMPANYFilterInput]
+  or: [ModelSubscriptionCOMPANYFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type Subscription {
+  onCreateCOMPANY(filter: ModelSubscriptionCOMPANYFilterInput, owner: String): COMPANY @aws_subscribe(mutations: ["createCOMPANY"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateCOMPANY(filter: ModelSubscriptionCOMPANYFilterInput, owner: String): COMPANY @aws_subscribe(mutations: ["updateCOMPANY"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteCOMPANY(filter: ModelSubscriptionCOMPANYFilterInput, owner: String): COMPANY @aws_subscribe(mutations: ["deleteCOMPANY"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onCreateINCIDENT(filter: ModelSubscriptionINCIDENTFilterInput, owner: String): INCIDENT @aws_subscribe(mutations: ["createINCIDENT"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateINCIDENT(filter: ModelSubscriptionINCIDENTFilterInput, owner: String): INCIDENT @aws_subscribe(mutations: ["updateINCIDENT"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteINCIDENT(filter: ModelSubscriptionINCIDENTFilterInput, owner: String): INCIDENT @aws_subscribe(mutations: ["deleteINCIDENT"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onCreateUSER(filter: ModelSubscriptionUSERFilterInput, owner: String): USER @aws_subscribe(mutations: ["createUSER"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateUSER(filter: ModelSubscriptionUSERFilterInput, owner: String): USER @aws_subscribe(mutations: ["updateUSER"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteUSER(filter: ModelSubscriptionUSERFilterInput, owner: String): USER @aws_subscribe(mutations: ["deleteUSER"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+}
+
+type ModelINCIDENTConnection @aws_iam @aws_cognito_user_pools @aws_api_key {
+  items: [INCIDENT]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelIMPACTInput {
+  eq: IMPACT
+  ne: IMPACT
+}
+
+input ModelITYPEInput {
+  eq: ITYPE
+  ne: ITYPE
+}
+
+input ModelINCIDENTFilterInput {
+  id: ModelIDInput
+  date_time: ModelStringInput
+  ongoing: ModelBooleanInput
+  Impact: ModelIMPACTInput
+  Incident_type: ModelITYPEInput
+  by_you_or_third_party: ModelBooleanInput
+  userID: ModelIDInput
+  companyID: ModelIDInput
+  and: [ModelINCIDENTFilterInput]
+  or: [ModelINCIDENTFilterInput]
+  not: ModelINCIDENTFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelINCIDENTConditionInput {
+  date_time: ModelStringInput
+  ongoing: ModelBooleanInput
+  Impact: ModelIMPACTInput
+  Incident_type: ModelITYPEInput
+  by_you_or_third_party: ModelBooleanInput
+  userID: ModelIDInput
+  companyID: ModelIDInput
+  and: [ModelINCIDENTConditionInput]
+  or: [ModelINCIDENTConditionInput]
+  not: ModelINCIDENTConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateINCIDENTInput {
+  id: ID
+  date_time: AWSDateTime!
+  ongoing: Boolean!
+  Impact: IMPACT!
+  Incident_type: ITYPE!
+  by_you_or_third_party: Boolean!
+  userID: ID!
+  companyID: ID!
+  _version: Int
+}
+
+input UpdateINCIDENTInput {
+  id: ID!
+  date_time: AWSDateTime
+  ongoing: Boolean
+  Impact: IMPACT
+  Incident_type: ITYPE
+  by_you_or_third_party: Boolean
+  userID: ID
+  companyID: ID
+  _version: Int
+}
+
+input DeleteINCIDENTInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionINCIDENTFilterInput {
+  id: ModelSubscriptionIDInput
+  date_time: ModelSubscriptionStringInput
+  ongoing: ModelSubscriptionBooleanInput
+  Impact: ModelSubscriptionStringInput
+  Incident_type: ModelSubscriptionStringInput
+  by_you_or_third_party: ModelSubscriptionBooleanInput
+  userID: ModelSubscriptionIDInput
+  companyID: ModelSubscriptionIDInput
+  and: [ModelSubscriptionINCIDENTFilterInput]
+  or: [ModelSubscriptionINCIDENTFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelUSERConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [USER]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelUSERFilterInput {
+  id: ModelIDInput
+  email: ModelStringInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  phonenumber: ModelStringInput
+  organisationname: ModelStringInput
+  organisationaddress: ModelStringInput
+  websiteaddress: ModelStringInput
+  verify_email: ModelStringInput
+  and: [ModelUSERFilterInput]
+  or: [ModelUSERFilterInput]
+  not: ModelUSERFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelUSERConditionInput {
+  email: ModelStringInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  phonenumber: ModelStringInput
+  organisationname: ModelStringInput
+  organisationaddress: ModelStringInput
+  websiteaddress: ModelStringInput
+  verify_email: ModelStringInput
+  and: [ModelUSERConditionInput]
+  or: [ModelUSERConditionInput]
+  not: ModelUSERConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateUSERInput {
+  id: ID
+  email: AWSEmail!
+  firstname: String!
+  lastname: String!
+  phonenumber: AWSPhone!
+  organisationname: String
+  organisationaddress: String
+  websiteaddress: AWSURL
+  verify_email: AWSEmail!
+  _version: Int
+}
+
+input UpdateUSERInput {
+  id: ID!
+  email: AWSEmail
+  firstname: String
+  lastname: String
+  phonenumber: AWSPhone
+  organisationname: String
+  organisationaddress: String
+  websiteaddress: AWSURL
+  verify_email: AWSEmail
+  _version: Int
+}
+
+input DeleteUSERInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionUSERFilterInput {
+  id: ModelSubscriptionIDInput
+  email: ModelSubscriptionStringInput
+  firstname: ModelSubscriptionStringInput
+  lastname: ModelSubscriptionStringInput
+  phonenumber: ModelSubscriptionStringInput
+  organisationname: ModelSubscriptionStringInput
+  organisationaddress: ModelSubscriptionStringInput
+  websiteaddress: ModelSubscriptionStringInput
+  verify_email: ModelSubscriptionStringInput
+  and: [ModelSubscriptionUSERFilterInput]
+  or: [ModelSubscriptionUSERFilterInput]
+  _deleted: ModelBooleanInput
+}
